@@ -23,13 +23,15 @@ public class Scraper {
         
         try {
             // Carga el archivo HTML estático localmente
-            File input = new File("index.html");
-            Document doc = Jsoup.parse(input, "UTF-8", ""); 
+                //File input = new File("index.html");
+                //Document doc = Jsoup.parse(input, "UTF-8", ""); 
+
+                Document doc = Jsoup.connect("https://www.trivago.es/es/odr/hoteles-bilbao-espa%C3%B1a?search=200-13446&_gl=1*r4kh85*_up*MQ..*_gs*MQ..&gclid=Cj0KCQiApfjKBhC0ARIsAMiR_IuF2obUntl6XdCUUc5TgPZ2BpdeUKd-rF9PIZOH-DTZK7mDBvbQJd4aArFZEALw_wcB&gbraid=0AAAAAD6-gN-uMjptaWK9wENy-8Qd4FMpX#").get();
             
             System.out.println("Documento HTML cargado. Iniciando el scraping (Extracción de datos)...");
             
             // 2. Seleccionar todos los contenedores de producto
-            Elements productos = doc.select(".producto"); 
+            Elements productos = doc.select("._50jjfW"); 
             
             // ----------------------------------------------------
             // FASE 2: Preprocesamiento (Extracción y Limpieza)
@@ -39,10 +41,10 @@ public class Scraper {
             for (Element producto : productos) {
                 
                 // Tarea A: Extraer el título
-                String titulo = producto.select(".titulo-producto").text();
+                String titulo = producto.select("h2.tODn3R").text();
                 
                 // Tarea B: Extraer el precio como texto
-                String precioTexto = producto.select(".precio").text();
+                String precioTexto = producto.select(".UugvlL").text();
                 
                 // Tarea C: Limpieza del Dato (EL ALUMNO COMPLETA ESTA LÓGICA)
                 String precioLimpio = precioTexto;
@@ -56,7 +58,7 @@ public class Scraper {
                 // ----------------------------------------------------------------------------------
                 
                 // 3. Estructurar el dato: Añadir al StringBuilder en formato CSV
-                csvData.append(titulo).append(";").append(precioLimpio).append("\n");
+                csvData.append(titulo).append(", ").append(precioLimpio).append("€\n");
             }
             
             // ----------------------------------------------------
